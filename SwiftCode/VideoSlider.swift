@@ -193,8 +193,8 @@ open class VideoSlider: UIControl {
     open override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
 
         self.vsState = .VideoSliderStateBegan
-        let startPoint: CGPoint = touch.location(in: self)
-        self.isPressButton = self.sliderButtonBack.frame.contains(startPoint)
+        let startPoint: CGPoint = touch.location(in: self.sliderButtonBack)
+        self.isPressButton = self.sliderButtonBack.bounds.contains(startPoint)
         self.sendActions(for: .valueChanged)
         return true
     }
