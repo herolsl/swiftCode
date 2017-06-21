@@ -18,7 +18,7 @@ public enum VideoSliderState {
 
 struct VSConstants {
     static let LINE_HEIGHT: CGFloat = 2
-    static let BUTTON_HEIGHT: CGFloat = 30
+    static let BUTTON_HEIGHT: CGFloat = 16
 }
 
 open class VideoSlider: UIControl {
@@ -59,6 +59,9 @@ open class VideoSlider: UIControl {
     private var sliderAbove: UIView!
     // 滑动按钮
     private var sliderButton: UIImageView!
+    // 滑动按钮图片
+    private var sliderButtonBack: UIImageView!
+
     // 手势的第一接触点是否在滑块内
     private var isPressButton: Bool = false
 
@@ -82,12 +85,15 @@ open class VideoSlider: UIControl {
         self.sliderAbove = UIView.init()
         self.addSubview(self.sliderAbove)
 
+        self.sliderButtonBack = UIImageView.init()
+        self.addSubview(self.sliderButtonBack)
+
         self.sliderButton = UIImageView.init()
         self.sliderButton.layer.shadowOffset = CGSize.init(width: 0, height: 3)
         self.sliderButton.layer.shadowRadius = 3
         self.sliderButton.layer.shadowOpacity = 0.4
         self.sliderButton.layer.shadowColor = UIColor.black.cgColor
-        self.addSubview(self.sliderButton)
+        self.sliderButtonBack.addSubview(self.sliderButton)
 
         self.addValueObserve()
     }
@@ -164,11 +170,20 @@ open class VideoSlider: UIControl {
             btnCenterX = self.vsValue*self.frame.width;
         }
 
+        self.sliderButtonBack.frame = CGRect.init(x: 0,
+                                                  y: 0,
+                                                  width: 50,
+                                                  height: 40)
+        self.sliderButtonBack.center = CGPoint.init(x: btnCenterX, y: self.frame.height/2)
+        self.sliderButtonBack.backgroundColor = UIColor.clear
+//        self.sliderButtonBack.layer.cornerRadius = VSConstants.BUTTON_HEIGHT/2
+
         self.sliderButton.frame = CGRect.init(x: 0,
                                               y: 0,
                                               width: VSConstants.BUTTON_HEIGHT,
                                               height: VSConstants.BUTTON_HEIGHT)
-        self.sliderButton.center = CGPoint.init(x: btnCenterX, y: self.frame.height/2)
+        self.sliderButton.center = CGPoint.init(x: self.sliderButtonBack.frame.width/2,
+                                                y: self.sliderButtonBack.frame.height/2)
         self.sliderButton.backgroundColor = self.thumbColor ?? UIColor.white
         self.sliderButton.layer.cornerRadius = VSConstants.BUTTON_HEIGHT/2
 
@@ -179,7 +194,7 @@ open class VideoSlider: UIControl {
 
         self.vsState = .VideoSliderStateBegan
         let startPoint: CGPoint = touch.location(in: self)
-        self.isPressButton = self.sliderButton.frame.contains(startPoint)
+        self.isPressButton = self.sliderButtonBack.frame.contains(startPoint)
         self.sendActions(for: .valueChanged)
         return true
     }

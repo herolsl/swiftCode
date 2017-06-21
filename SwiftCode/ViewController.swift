@@ -20,6 +20,10 @@ class ViewController: UIViewController {
 
 
         let slider: VideoSlider = VideoSlider.init(frame: CGRect.init(x: 20, y: 400, width: 260, height: 60))
+        slider.vsLoadingValue = 0.8
+        slider.maxProgressColor = UIColor.white
+        slider.currentProgressColor = UIColor.red
+        slider.bufferProgressColor = UIColor.brown
         slider.backgroundColor = UIColor.blue
         self.view.addSubview(slider)
 
